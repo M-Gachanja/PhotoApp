@@ -1,0 +1,46 @@
+{% extends 'gallery/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full max-h-96 object-contain">
+    
+    <div class="p-6">
+        <h1 class="text-3xl font-bold mb-2">{{ photo.title }}</h1>
+        <p class="text-gray-600 mb-4">Uploaded by {{ photo.uploaded_by.username }} on {{ photo.uploaded_at|date:"F d, Y" }}</p>
+        
+        {% if photo.description %}
+            <div class="mb-4">
+                <p class="text-gray-700">{{ photo.description }}</p>
+            </div>
+        {% endif %}
+        
+        {% if photo.tags.all %}
+            <div class="mb-6">
+                <h3 class="font-semibold mb-2">Tags:</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% for tag in photo.tags.all %}
+                        <a href="{% url 'home' %}?tag={{ tag.name }}" 
+                           class="px-3 py-1 bg-gray-200 rounded-full text-sm hover:bg-gray-300">
+                            {{ tag.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <form action="{% url 'like_photo' photo.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 {% if is_liked %}text-red-500 fill-current{% else %}text-gray-500{% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        <span>{{ total_likes }}</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

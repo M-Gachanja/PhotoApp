@@ -1,0 +1,60 @@
+{% extends 'gallery/base.html' %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold mb-4">Photo Gallery</h1>
+    
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Filter by Tags</h2>
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'home' %}" 
+               class="px-3 py-1 rounded-full {% if not selected_tag %}bg-blue-600 text-white{% else %}bg-gray-200{% endif %}">
+                All Photos
+            </a>
+            {% for tag in tags %}
+                <a href="{% url 'home' %}?tag={{ tag.name }}" 
+                   class="px-3 py-1 rounded-full {% if selected_tag == tag.name %}bg-blue-600 text-white{% else %}bg-gray-200{% endif %}">
+                    {{ tag.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% if selected_tag %}
+    <div class="mb-4">
+        <p class="text-lg">Showing photos tagged with: <span class="font-semibold">{{ selected_tag }}</span></p>
+        <a href="{% url 'home' %}" class="text-blue-600 hover:underline text-sm">Clear filter</a>
+    </div>
+{% endif %}
+{% if photos %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for photo in photos %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <a href="{% url 'photo_detail' photo.pk %}">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full h-48 object-cover">
+            </a>
+            <div class="p-4">
+                <h3 class="font-semibold text-lg mb-2">{{ photo.title }}</h3>
+                <p class="text-gray-600 text-sm mb-2">By {{ photo.uploaded_by.username }}</p>
+                {% if photo.tags.all %}
+                    <div class="flex flex-wrap gap-1">
+                        {% for tag in photo.tags.all %}
+                            <span class="px-2 py-1 bg-gray-200 text-xs rounded-full">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-400 text-xs">No tags</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-12">
+    <p class="text-gray-500 text-lg">No photos found{% if selected_tag %} with the tag "{{ selected_tag }}"{% endif %}.</p>
+    {% if selected_tag %}
+        <a href="{% url 'home' %}" class="text-blue-600 hover:underline mt-2 inline-block">View all photos</a>
+    {% endif %}
+</div>
+{% endif %}
+</div>
+{% endblock %}

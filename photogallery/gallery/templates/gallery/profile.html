@@ -1,0 +1,58 @@
+{% extends 'gallery/base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-6">Profile</h1>
+    
+    <div class="flex flex-col md:flex-row gap-6 mb-8">
+        <div class="flex-shrink-0">
+            {% if has_profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" 
+                     class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
+            {% else %}
+                <div class="w-32 h-32 rounded-full bg-gray-200 border-2 border-gray-300 flex items-center justify-center">
+                    <span class="text-gray-500">No image</span>
+                </div>
+            {% endif %}
+        </div>
+        <div>
+            <h2 class="text-xl font-semibold">{{ user.username }}</h2>
+            <p class="text-gray-600 mb-2">{{ user.email }}</p>
+            <p class="text-gray-700">{{ user.userprofile.bio }}</p>
+        </div>
+    </div>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="space-y-4">
+            <div>
+                <label class="block text-gray-700">Username</label>
+                {{ u_form.username }}
+            </div>
+            <div>
+                <label class="block text-gray-700">Email</label>
+                {{ u_form.email }}
+            </div>
+            <div>
+                <label class="block text-gray-700">Bio</label>
+                {{ p_form.bio }}
+            </div>
+            <div>
+                <label class="block text-gray-700">Profile Picture</label>
+                {{ p_form.profile_picture }}
+                {% if has_profile_picture %}
+                    <div class="mt-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="profile_picture-clear" class="rounded">
+                            <span class="ml-2 text-gray-600">Remove current profile picture</span>
+                        </label>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <button type="submit" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Update Profile
+        </button>
+    </form>
+</div>
+{% endblock %}

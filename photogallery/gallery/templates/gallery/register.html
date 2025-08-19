@@ -1,0 +1,20 @@
+{% extends 'gallery/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-6">Register</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4">
+            Register
+        </button>
+    </form>
+    
+    <div class="mt-4 text-center">
+        <p>Already have an account? <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login</a></p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'gallery/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-6">Login</h1>
+    
+    {% if form.errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            Your username and password didn't match. Please try again.
+        </div>
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4">
+            Login
+        </button>
+    </form>
+    
+    <div class="mt-4 text-center">
+        <p>Don't have an account? <a href="{% url 'register' %}" class="text-blue-600 hover:underline">Register</a></p>
+    </div>
+</div>
+{% endblock %}

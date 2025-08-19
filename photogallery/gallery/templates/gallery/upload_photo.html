@@ -1,0 +1,20 @@
+{% extends 'gallery/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-6">Upload Photo</h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4">
+            Upload Photo
+        </button>
+    </form>
+    
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="text-blue-600 hover:underline">Back to gallery</a>
+    </div>
+</div>
+{% endblock %}
